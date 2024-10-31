@@ -1,0 +1,18 @@
+<div class="navbar bg-gray-900 text-white">
+    <div class="flex-1">
+        <a href="/" class="btn btn-ghost normal-case text-xl text-white">Lego Collection</a>
+    </div>
+    <div class="flex-none">
+        <ul class="menu menu-horizontal px-1">
+            <li>
+                <a class="<%= (page == '/') ? 'active text-purple-400' : 'text-gray-300 hover:text-purple-400' %>" href="/">Home</a>
+            </li>
+            <li>
+                <a class="<%= (page == '/lego/sets') ? 'active text-purple-400' : 'text-gray-300 hover:text-purple-400' %>" href="/lego/sets">View Collection</a>
+            </li>
+            <li>
+                <a class="<%= (page == '/about') ? 'active text-purple-400' : 'text-gray-300 hover:text-purple-400' %>" href="/about">About</a>
+            </li>
+        </ul>
+    </div>
+</div>

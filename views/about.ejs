@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Me - Lego Collection</title>
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+<body class="bg-gray-900 text-yellow-400">
+    <%- include('partials/navbar', { page: '/about' }) %> 
+
+    <div class="container mx-auto py-10 px-5">
+        <!-- Hero Section -->
+        <div class="hero min-h-fit bg-yellow-500 rounded-lg shadow-lg text-gray-900">
+            <div class="hero-content text-center py-10">
+                <div class="max-w-md">
+                    <h1 class="text-5xl font-extrabold mb-4">About Me</h1>
+                    <p class="text-lg font-medium">I am Aksharajsinh, and I am learning to code!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quote Section -->
+        <% if (typeof quote !== 'undefined') { %>
+        <div class="quote-section text-center my-10">
+            <blockquote class="italic text-2xl font-semibold text-yellow-400">
+                "<%= quote.content %>"
+                <br>
+                <cite class="text-yellow-600">- <%= quote.author %></cite>
+            </blockquote>
+        </div>
+        <% } %>
+
+        <!-- Main Content Section -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-10">
+            <!-- Image Section -->
+            <div class="flex justify-center">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTwMvKgDfk5Xt4tMfOp2018QJzmPjAkMJqLdA&s" alt="Your Image" class="rounded-lg shadow-lg w-full md:w-3/4 object-cover border-4 border-yellow-400">
+            </div>
+
+            <!-- Description Section -->
+            <div class="text-lg text-yellow-300 leading-relaxed">
+                <p>
+                    I'm passionate about web development and enjoy learning new technologies. 
+                    Currently, I'm taking a course on Node.js and Express.js to build RESTful APIs. 
+                    In my free time, I like to listen to music and explore new coding skills. 
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
