@@ -9,10 +9,12 @@ function initialize() {
     return new Promise((resolve, reject) => {
         fs.readFile(path.join(__dirname, '../data/setData.json'), 'utf8', (err, setData) => {
             if (err) {
+                console.error("Error loading setData.json:", err); // Log exact error
                 return reject("Unable to load set data file");
             }
             fs.readFile(path.join(__dirname, '../data/themeData.json'), 'utf8', (err, themeData) => {
                 if (err) {
+                    console.error("Error loading themeData.json:", err); // Log exact error
                     return reject("Unable to load theme data file");
                 }
                 
@@ -21,7 +23,6 @@ function initialize() {
 
                 // Map theme names to sets
                 sets.forEach(set => {
-                    // Convert theme_id and id to strings to ensure proper matching
                     const theme = themes.find(t => t.id.toString() === set.theme_id.toString());
                     set.theme = theme ? theme.name : "Unknown";
                 });
@@ -31,6 +32,7 @@ function initialize() {
         });
     });
 }
+
 
 // Function to get all sets, optionally filtered by a theme
 function getAllSets(themeFilter) {
