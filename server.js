@@ -11,6 +11,7 @@
 * Published URL: ___________________________________________________________
 *
 ********************************************************************************/
+
 const express = require('express');
 const path = require('path');
 const app = express();
@@ -23,18 +24,21 @@ app.set('views', path.join(__dirname, 'views'));
 // Serve static files from the "public" directory
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Route setup will only function correctly if initialization is successful
 legoSets.initialize()
     .then(() => {
+        console.log("legoSets initialized successfully.");
+
         // Route to display all sets with optional theme filtering
         app.get('/lego/sets', (req, res) => {
-            const themeFilter = req.query.theme || ''; // Retrieve the theme filter from query parameters
-            const allSets = legoSets.getAllSets(themeFilter); // Filtered sets based on theme
-            const allThemes = legoSets.getAllThemes(); // List of all themes
+            const themeFilter = req.query.theme || '';
+            const allSets = legoSets.getAllSets(themeFilter);
+            const allThemes = legoSets.getAllThemes();
 
             res.render('sets', {
                 sets: allSets,
                 themes: allThemes,
-                selectedTheme: themeFilter // Pass the selected theme for dropdown
+                selectedTheme: themeFilter
             });
         });
 
@@ -59,15 +63,20 @@ legoSets.initialize()
             res.render('about');
         });
 
-        // Start the server
-        const PORT = process.env.PORT || 5000;
-        app.listen(PORT, () => {
-            console.log(`Server running on port ${PORT}`);
-});
-
     })
     .catch(err => {
         console.error("Initialization failed:", err);
+        
+        // If initialization fails, you can add a route to handle errors
+        app.get('*', (req, res) => {
+            res.status(500).send("Initialization failed. Please try again later.");
+        });
     });
+
+// Start the server outside of initialize to ensure it runs regardless
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
+});
 
 module.exports = app;
