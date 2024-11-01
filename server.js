@@ -16,10 +16,7 @@ const path = require('path');
 const app = express();
 const legoSets = require('./modules/legoSets');
 
-// Test root route
-app.get('/', (req, res) => {
-    res.send("Hello, World! - Testing route");
-});
+
 
 // Set view engine to EJS
 app.set('view engine', 'ejs');
