@@ -2,14 +2,9 @@ const express = require('express');
 const path = require('path');
 const app = express();
 
-// Set up view engine and static file directory
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views'));  // This should be the path to your EJS templates
-app.use(express.static(path.join(__dirname, 'public')));  // Static files
-
-// Root route rendering an EJS view
+// Serve static HTML file for testing
 app.get('/', (req, res) => {
-    res.render('home', { title: "Home Page" });  // Render `home.ejs` in `views`
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 const PORT = process.env.PORT || 3000;
