@@ -1,0 +1,24 @@
+{
+  "name": "WEB_A4_AKSHARAJSINH",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "tw:build": "npx tailwindcss -i ./public/css/tailwind.css -o ./public/css/main.css --watch",
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^4.21.0",
+    "node-fetch": "^3.3.2"
+  },
+  "devDependencies": {
+    "@tailwindcss/typography": "^0.5.0",
+    "daisyui": "^4.12.13",
+    "nodemon": "^3.1.7",
+    "tailwindcss": "^3.4.13"
+  }
+}
