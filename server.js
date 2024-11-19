@@ -28,6 +28,8 @@ app.set('views', path.join(__dirname, 'views'));
 // Serve static files from the "public" directory
 app.use(express.static(path.join(__dirname, 'public')));
 
+console.log("Starting server...");
+
 // Route setup will only function correctly if initialization is successful
 legoSets.initialize()
     .then(() => {
@@ -36,82 +38,142 @@ legoSets.initialize()
         // Route to display all sets with optional theme filtering
         app.get('/lego/sets', (req, res) => {
             const themeFilter = req.query.theme || '';
+            console.log("Fetching all sets with theme filter:", themeFilter);
+
             legoSets.getAllSets(themeFilter)
                 .then(sets => legoSets.getAllThemes()
-                    .then(themes => res.render('sets', {
-                        sets,
-                        themes,
-                        selectedTheme: themeFilter,
-                    })))
-                .catch(err => res.render('505', { message: `Unable to load sets: ${err.message}` }));
+                    .then(themes => {
+                        console.log("Sets and themes fetched successfully.");
+                        res.render('sets', {
+                            sets,
+                            themes,
+                            selectedTheme: themeFilter,
+                        });
+                    }))
+                .catch(err => {
+                    console.error("Error fetching sets or themes:", err);
+                    res.render('505', { message: `Unable to load sets: ${err.message}` });
+                });
         });
 
         // Route to display a specific set by set number
         app.get('/lego/sets/:set_num', (req, res) => {
+            console.log("Fetching set by number:", req.params.set_num);
+
             legoSets.getSetByNum(req.params.set_num)
-                .then(set => res.render('set', { set }))
-                .catch(err => res.status(404).render('404', { message: err.message }));
+                .then(set => {
+                    console.log("Set fetched successfully:", set);
+                    res.render('set', { set });
+                })
+                .catch(err => {
+                    console.error("Error fetching set:", err);
+                    res.status(404).render('404', { message: err.message });
+                });
         });
 
         // Route to render "Add Set" form
         app.get('/lego/addSet', (req, res) => {
+            console.log("Rendering Add Set form...");
             legoSets.getAllThemes()
-                .then(themes => res.render('addSet', { themes }))
-                .catch(err => res.render('505', { message: `Unable to load themes: ${err.message}` }));
+                .then(themes => {
+                    console.log("Themes fetched successfully for Add Set.");
+                    res.render('addSet', { themes });
+                })
+                .catch(err => {
+                    console.error("Error fetching themes:", err);
+                    res.render('505', { message: `Unable to load themes: ${err.message}` });
+                });
         });
 
         // Route to handle "Add Set" form submission
         app.post('/lego/addSet', (req, res) => {
+            console.log("Adding new set:", req.body);
             legoSets.addSet(req.body)
-                .then(() => res.redirect('/lego/sets'))
-                .catch(err => res.render('505', { message: `Unable to add set: ${err.message}` }));
+                .then(() => {
+                    console.log("Set added successfully.");
+                    res.redirect('/lego/sets');
+                })
+                .catch(err => {
+                    console.error("Error adding set:", err);
+                    res.render('505', { message: `Unable to add set: ${err.message}` });
+                });
         });
 
         // Route to render "Edit Set" form
         app.get('/lego/editSet/:num', (req, res) => {
             const setNum = req.params.num;
+            console.log("Rendering Edit Set form for:", setNum);
+
             Promise.all([legoSets.getSetByNum(setNum), legoSets.getAllThemes()])
                 .then(([setData, themeData]) => {
+                    console.log("Edit Set data fetched successfully.");
                     res.render('editSet', { themes: themeData, set: setData });
                 })
-                .catch(err => res.status(404).render('404', { message: err.message }));
+                .catch(err => {
+                    console.error("Error fetching Edit Set data:", err);
+                    res.status(404).render('404', { message: err.message });
+                });
         });
 
         // Route to handle "Edit Set" form submission
         app.post('/lego/editSet', (req, res) => {
             const setNum = req.body.set_num;
+            console.log("Editing set:", setNum);
+
             legoSets.updateSet(setNum, req.body)
-                .then(() => res.redirect('/lego/sets'))
-                .catch(err => res.render('505', { message: `Unable to update set: ${err.message}` }));
+                .then(() => {
+                    console.log("Set updated successfully.");
+                    res.redirect('/lego/sets');
+                })
+                .catch(err => {
+                    console.error("Error updating set:", err);
+                    res.render('505', { message: `Unable to update set: ${err.message}` });
+                });
         });
 
         // Route to delete a set
         app.get('/lego/deleteSet/:set_num', (req, res) => {
+            console.log("Deleting set:", req.params.set_num);
+
             legoSets.deleteSet(req.params.set_num)
-                .then(() => res.redirect('/lego/sets'))
-                .catch(err => res.render('505', { message: `I'm sorry, but we have encountered the following error: ${err.message}` }));
+                .then(() => {
+                    console.log("Set deleted successfully.");
+                    res.redirect('/lego/sets');
+                })
+                .catch(err => {
+                    console.error("Error deleting set:", err);
+                    res.render('505', { message: `Error deleting set: ${err.message}` });
+                });
         });
 
-        // Home route with featured sets
         app.get('/', (req, res) => {
+            console.log("Fetching featured sets...");
             legoSets.getFeaturedSets()
-                .then(featuredSets => res.render('home', { featuredSets }))
-                .catch(err => res.render('505', { message: `Unable to load featured sets: ${err.message}` }));
+                .then(featuredSets => {
+                    console.log("Featured sets fetched successfully.");
+                    res.render('home', { featuredSets });
+                })
+                .catch(err => {
+                    console.error("Error fetching featured sets:", err);
+                    res.render('505', { message: `Unable to load featured sets: ${err.message}` });
+                });
         });
-
+        
         // About route
         app.get('/about', (req, res) => {
+            console.log("Rendering About page...");
             res.render('about');
         });
 
         // 404 Error: Undefined Routes
         app.use((req, res) => {
+            console.error("404 Error - Page not found:", req.originalUrl);
             res.status(404).render('404', { message: "Page not found." });
         });
 
         // 500 Error: Middleware for Internal Server Errors
         app.use((err, req, res, next) => {
-            console.error("Internal Server Error:", err.message);
+            console.error("500 Internal Server Error:", err.message);
             res.status(500).render('505', { message: `Internal Server Error: ${err.message}` });
         });
     })

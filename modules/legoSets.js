@@ -5,7 +5,7 @@ const Sequelize = require('sequelize');
 const sequelize = new Sequelize(process.env.DB_DATABASE, process.env.DB_USER, process.env.DB_PASSWORD, {
     host: process.env.DB_HOST,
     dialect: 'postgres',
-    logging: false, // Disable SQL query logging for cleaner output
+    logging: console.log, // Enable logging for SQL queries
     dialectOptions: {
         ssl: {
             require: true,
@@ -74,64 +74,124 @@ function initialize() {
 
 /**
  * Get all sets from the database, optionally filtered by a theme.
- * @param {string} themeFilter - Optional theme name to filter sets by.
  */
 function getAllSets(themeFilter) {
-    const options = {
-        include: [Theme],
-    };
+    console.log("Fetching all sets with theme filter:", themeFilter);
+    const options = { include: [Theme] };
 
     if (themeFilter) {
-        options.where = {
-            '$Theme.name$': themeFilter,
-        };
+        options.where = { '$Theme.name$': themeFilter };
     }
 
     return Set.findAll(options)
-        .then(sets => sets.map(set => ({
-            set_num: set.set_num,
-            name: set.name,
-            year: set.year,
-            num_parts: set.num_parts,
-            theme: set.Theme ? set.Theme.name : "Unknown",
-            img_url: set.img_url,
-        })));
+        .then(sets => {
+            console.log("Sets fetched successfully.");
+            return sets.map(set => ({
+                set_num: set.set_num,
+                name: set.name,
+                year: set.year,
+                num_parts: set.num_parts,
+                theme: set.Theme ? set.Theme.name : "Unknown",
+                img_url: set.img_url,
+            }));
+        })
+        .catch(err => {
+            console.error("Error fetching sets:", err);
+            throw err;
+        });
 }
 
 /**
  * Get all themes from the database.
  */
 function getAllThemes() {
-    return Theme.findAll({
-        attributes: ['id', 'name'],
-    });
+    console.log("Fetching all themes...");
+    return Theme.findAll({ attributes: ['id', 'name'] })
+        .then(themes => {
+            console.log("Themes fetched successfully.");
+            return themes;
+        })
+        .catch(err => {
+            console.error("Error fetching themes:", err);
+            throw err;
+        });
 }
 
 /**
  * Get a set by its set number.
- * @param {string} setNum - The set number to search for.
  */
 function getSetByNum(setNum) {
-    return Set.findOne({
-        where: { set_num: setNum },
-        include: [Theme],
-    }).then(set => {
-        if (!set) throw new Error("Unable to find requested set");
-        return {
-            set_num: set.set_num,
-            name: set.name,
-            year: set.year,
-            num_parts: set.num_parts,
-            theme: set.Theme ? set.Theme.name : "Unknown",
-            img_url: set.img_url,
-        };
-    });
+    console.log("Fetching set by number:", setNum);
+    return Set.findOne({ where: { set_num: setNum }, include: [Theme] })
+        .then(set => {
+            if (!set) {
+                throw new Error("Set not found");
+            }
+            console.log("Set fetched successfully:", set);
+            return {
+                set_num: set.set_num,
+                name: set.name,
+                year: set.year,
+                num_parts: set.num_parts,
+                theme: set.Theme ? set.Theme.name : "Unknown",
+                img_url: set.img_url,
+            };
+        })
+        .catch(err => {
+            console.error("Error fetching set:", err);
+            throw err;
+        });
 }
 
 /**
- * Get featured sets (e.g., first 6 sets).
+ * Add a new set to the database.
  */
+function addSet(setData) {
+    console.log("Adding new set:", setData);
+    return Set.create(setData)
+        .then(() => {
+            console.log("Set added successfully.");
+        })
+        .catch(err => {
+            console.error("Error adding set:", err);
+            throw err;
+        });
+}
+
+/**
+ * Edit an existing set in the database.
+ */
+function editSet(set_num, setData) {
+    console.log("Editing set:", set_num);
+    return Set.update(setData, { where: { set_num } })
+        .then(([rowsUpdated]) => {
+            if (rowsUpdated === 0) throw new Error("No set found to update.");
+            console.log("Set updated successfully.");
+        })
+        .catch(err => {
+            console.error("Error updating set:", err);
+            throw err;
+        });
+}
+
+/**
+ * Delete a set from the database.
+ */
+function deleteSet(set_num) {
+    console.log("Deleting set:", set_num);
+    return Set.destroy({ where: { set_num } })
+        .then(rowsDeleted => {
+            if (rowsDeleted === 0) throw new Error("No set found to delete");
+            console.log("Set deleted successfully.");
+        })
+        .catch(err => {
+            console.error("Error deleting set:", err);
+            throw err;
+        });
+}
+
 function getFeaturedSets() {
+    console.log("Fetching featured sets...");
     return Set.findAll({
         limit: 6,
         include: [Theme],
@@ -145,73 +205,13 @@ function getFeaturedSets() {
     })));
 }
 
-/**
- * Add a new set to the database.
- * @param {Object} setData - The data of the set to add.
- */
-function addSet(setData) {
-    return Set.create(setData)
-        .then(() => {
-            console.log(`Set with set_num ${setData.set_num} added successfully.`);
-        })
-        .catch(err => {
-            if (err.name === 'SequelizeUniqueConstraintError') {
-                throw new Error(`A set with the set number '${setData.set_num}' already exists.`);
-            } else {
-                throw new Error(`Unable to add set: ${err.message}`);
-            }
-        });
-}
-
-/**
- * Edit an existing set in the database.
- * @param {string} set_num - The set number of the set to update.
- * @param {object} setData - The updated set data.
- */
-function editSet(set_num, setData) {
-    return Set.update(setData, {
-        where: { set_num },
-    })
-        .then(([rowsUpdated]) => {
-            if (rowsUpdated === 0) throw new Error("No set found to update.");
-            console.log(`Set with set_num ${set_num} updated successfully.`);
-        })
-        .catch(err => {
-            if (err.errors && err.errors.length > 0) {
-                throw new Error(err.errors[0].message);
-            } else {
-                throw new Error(`Unable to update set: ${err.message}`);
-            }
-        });
-}
-
-/**
- * Delete a set from the database.
- * @param {string} set_num - The set number of the set to delete.
- */
-function deleteSet(set_num) {
-    return Set.destroy({
-        where: { set_num },
-    })
-        .then(rowsDeleted => {
-            if (rowsDeleted === 0) throw new Error("No set found to delete");
-            console.log(`Set with set_num ${set_num} deleted successfully.`);
-        })
-        .catch(err => {
-            console.error("Error deleting set:", err);
-            throw new Error(err.errors?.[0]?.message || "Unable to delete set");
-        });
-}
-
-
-
-module.exports = { 
-    initialize, 
-    getAllSets, 
-    getAllThemes, 
-    getSetByNum, 
-    getFeaturedSets, 
-    addSet, 
-    editSet, 
-    deleteSet 
+module.exports = {
+    initialize,
+    getAllSets,
+    getAllThemes,
+    getSetByNum,
+    addSet,
+    editSet,
+    deleteSet,
+    getFeaturedSets,
 };
