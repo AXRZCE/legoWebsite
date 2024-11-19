@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Set - <%= set.name %></title>
+    <link href="/css/main.css" rel="stylesheet">
+</head>
+<body class="bg-gray-900 text-gray-100">
+    <%- include('partials/navbar', { page: '' }) %>
+
+    <!-- Container -->
+    <div class="container mx-auto py-10 px-6">
+        <!-- Hero Section -->
+        <div class="bg-gray-800 p-6 rounded-lg mb-8 text-center">
+            <h1 class="text-4xl font-bold text-yellow-400">Edit Set: <%= set.name %></h1>
+            <p class="text-gray-300">Update the details of your Lego set below.</p>
+        </div>
+
+        <!-- Form Section -->
+        <div class="bg-gray-800 p-8 rounded-lg shadow-lg max-w-3xl mx-auto">
+            <form action="/lego/editSet" method="POST" class="space-y-6">
+                <!-- Set Number (Read-Only) -->
+                <div>
+                    <label for="set_num" class="block text-sm font-medium text-gray-200">Set Number</label>
+                    <input 
+                        type="text" 
+                        id="set_num" 
+                        name="set_num" 
+                        value="<%= set.set_num %>" 
+                        readonly 
+                        class="mt-1 block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg shadow-sm cursor-not-allowed text-gray-400"
+                    >
+                </div>
+
+                <!-- Set Name -->
+                <div>
+                    <label for="name" class="block text-sm font-medium text-gray-200">Name</label>
+                    <input 
+                        type="text" 
+                        id="name" 
+                        name="name" 
+                        value="<%= set.name %>" 
+                        required 
+                        class="mt-1 block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg shadow-sm"
+                    >
+                </div>
+
+                <!-- Year -->
+                <div>
+                    <label for="year" class="block text-sm font-medium text-gray-200">Year</label>
+                    <input 
+                        type="number" 
+                        id="year" 
+                        name="year" 
+                        value="<%= set.year %>" 
+                        required 
+                        class="mt-1 block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg shadow-sm"
+                    >
+                </div>
+
+                <!-- Number of Parts -->
+                <div>
+                    <label for="num_parts" class="block text-sm font-medium text-gray-200">Number of Parts</label>
+                    <input 
+                        type="number" 
+                        id="num_parts" 
+                        name="num_parts" 
+                        value="<%= set.num_parts %>" 
+                        required 
+                        class="mt-1 block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg shadow-sm"
+                    >
+                </div>
+
+                <!-- Image URL -->
+                <div>
+                    <label for="img_url" class="block text-sm font-medium text-gray-200">Image URL</label>
+                    <input 
+                        type="url" 
+                        id="img_url" 
+                        name="img_url" 
+                        value="<%= set.img_url %>" 
+                        required 
+                        class="mt-1 block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg shadow-sm"
+                    >
+                </div>
+
+                <!-- Theme ID -->
+                <div>
+                    <label for="theme_id" class="block text-sm font-medium text-gray-200">Theme</label>
+                    <select 
+                        id="theme_id" 
+                        name="theme_id" 
+                        required 
+                        class="mt-1 block w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-lg shadow-sm"
+                    >
+                        <% themes.forEach(theme => { %>
+                            <option value="<%= theme.id %>" <%= (set.theme_id == theme.id) ? "selected" : "" %>>
+                                <%= theme.name %>
+                            </option>
+                        <% }) %>
+                    </select>
+                </div>
+
+                <!-- Submit Button -->
+                <div>
+                    <button 
+                        type="submit" 
+                        class="w-full py-2 px-4 bg-yellow-500 text-gray-900 font-bold rounded-lg shadow-md hover:bg-yellow-600"
+                    >
+                        Update Set
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Return Button -->
+        <div class="mt-8 text-center">
+            <a href="#" onclick="history.back(); return false;" class="inline-block px-6 py-2 bg-yellow-500 text-gray-900 rounded-lg font-bold hover:bg-yellow-600">
+                Return
+            </a>
+        </div>
+        <div class="mt-4">
+            <a href="/lego/deleteSet/<%= set.set_num %>" 
+               class="inline-block px-4 py-2 bg-yellow-500 text-black rounded-md shadow-md hover:bg-black-600">
+                Delete Set
+            </a>
+        </div>
+    </div>
+</body>
+</html>

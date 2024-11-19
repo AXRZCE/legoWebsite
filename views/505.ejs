@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Internal Server Error</title>
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+<body class="bg-gray-900 text-gray-100">
+    <div class="text-center py-20">
+        <h1 class="text-6xl font-bold text-yellow-500">500</h1>
+        <p class="text-xl mt-4">I'm sorry, but we have encountered an internal server error.</p>
+        <% if (message) { %>
+            <p class="text-md mt-4 text-gray-400"><%= message %></p>
+        <% } %>
+        <a href="/" class="inline-block mt-6 bg-yellow-500 text-black px-4 py-2 rounded-lg hover:bg-yellow-600">Return Home</a>
+    </div>
+</body>
+</html>
