@@ -6,7 +6,7 @@
     "tw:build": "npx tailwindcss -i ./public/css/tailwind.css -o ./public/css/main.css --watch",
     "start": "node server.js",
     "dev": "nodemon server.js",
-    "vercel-build": "npm install && npm run build"
+    "build": "echo 'No build step required'"
   },
   "author": "",
   "license": "ISC",
