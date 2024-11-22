@@ -18,6 +18,13 @@ const legoSets = require('./modules/legoSets');
 
 const app = express();
 
+// Content Security Policy header to allow scripts from vercel.live
+const cspHeader = "default-src 'self'; script-src 'self' https://vercel.live; style-src 'self'; img-src 'self';";
+app.use((req, res, next) => {
+    res.setHeader('Content-Security-Policy', cspHeader);
+    next();
+});
+
 // Middleware to parse form data
 app.use(express.urlencoded({ extended: true }));
 
