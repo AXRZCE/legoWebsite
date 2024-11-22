@@ -1,10 +1,13 @@
+// legoSets.js
 require('dotenv').config();
 const Sequelize = require('sequelize');
+const pg = require('pg'); // Add this line
 
-// Initialize Sequelize connection with SSL
+// Initialize Sequelize connection with SSL and specify 'dialectModule'
 const sequelize = new Sequelize(process.env.DB_DATABASE, process.env.DB_USER, process.env.DB_PASSWORD, {
     host: process.env.DB_HOST,
     dialect: 'postgres',
+    dialectModule: pg, // Add this line
     logging: console.log, // Enable logging for SQL queries
     dialectOptions: {
         ssl: {
@@ -13,6 +16,8 @@ const sequelize = new Sequelize(process.env.DB_DATABASE, process.env.DB_USER, pr
         },
     },
 });
+
+// The rest of your code remains unchanged
 
 // Define the Theme model
 const Theme = sequelize.define('Theme', {
