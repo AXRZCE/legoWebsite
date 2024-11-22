@@ -24,19 +24,23 @@
 
     <!-- Featured Sets Section -->
     <div class="featured-sets container mx-auto px-4 py-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-        <% featuredSets.forEach(set => { %>
-            <div class="card bg-gray-800 shadow-lg rounded-lg overflow-hidden transition-transform transform hover:scale-105">
-                <img src="<%= set.img_url %>" alt="<%= set.name %>" class="w-full h-56 object-cover border-b-4 border-yellow-500">
-                <div class="card-content p-6 text-yellow-500">
-                    <h2 class="text-xl font-semibold mb-2"><%= set.name %></h2>
-                    <p class="text-yellow-400 mb-4"><%= set.description || "Explore this amazing set!" %></p>
-                    <a href="/lego/sets/<%= set.set_num %>" class="inline-block bg-yellow-500 text-gray-900 px-4 py-2 rounded hover:bg-yellow-600">
-                        View
-                    </a>
+        <% if (featuredSets && featuredSets.length > 0) { %>
+            <% featuredSets.forEach(set => { %>
+                <div class="card bg-gray-800 shadow-lg rounded-lg overflow-hidden transition-transform transform hover:scale-105">
+                    <img src="<%= set.img_url || '/images/default-set.jpg' %>" alt="<%= set.name || 'Lego Set' %>" class="w-full h-56 object-cover border-b-4 border-yellow-500">
+                    <div class="card-content p-6 text-yellow-500">
+                        <h2 class="text-xl font-semibold mb-2"><%= set.name || 'Unnamed Set' %></h2>
+                        <p class="text-yellow-400 mb-4"><%= set.Theme ? set.Theme.name : 'Unknown Theme' %></p>
+                        <p class="text-yellow-300 mb-4"><%= set.year ? `Released in ${set.year}` : '' %></p>
+                        <a href="/lego/sets/<%= set.set_num %>" class="inline-block bg-yellow-500 text-gray-900 px-4 py-2 rounded hover:bg-yellow-600">
+                            View Set
+                        </a>
+                    </div>
                 </div>
-            </div>
-        <% }); %>
+            <% }); %>
+        <% } else { %>
+            <p class="text-center text-yellow-500 text-lg">No featured sets available at this time. Check back later!</p>
+        <% } %>
     </div>
-
 </body>
 </html>

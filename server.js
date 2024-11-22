@@ -208,9 +208,7 @@ app.use(express.urlencoded({ extended: true }));
 
 app.set('view engine', 'ejs');
 
-app.get('/', (req, res) => {
-  res.render("home")
-});
+
 
 app.get('/about', (req, res) => {
   res.render("about");
@@ -264,32 +262,49 @@ app.get("/lego/deleteSet/:num", async (req, res) => {
 })
 
 app.get("/lego/sets", async (req, res) => {
-
-  let sets = [];
-
-  try {
-    if (req.query.theme) {
-      sets = await legoData.getSetsByTheme(req.query.theme);
-    } else {
-      sets = await legoData.getAllSets();
+    try {
+      const themeFilter = req.query.theme || '';
+      const themes = await legoData.getAllThemes();
+      const sets = themeFilter
+        ? await legoData.getSetsByTheme(themeFilter)
+        : await legoData.getAllSets();
+  
+      res.render("sets", {
+        sets,
+        themes,
+        selectedTheme: themeFilter, // Pass selected theme for the dropdown
+      });
+    } catch (err) {
+      console.error("Error fetching sets or themes:", err);
+      res.status(500).render("500", { message: `Unable to load sets: ${err.message}` });
     }
+  });
+  
 
-    res.render("sets", { sets })
-  } catch (err) {
-    res.status(404).render("404", { message: err });
-  }
-
+  app.get("/lego/sets/:num", async (req, res) => {
+    try {
+        let set = await legoData.getSetByNum(req.params.num); // Fetch set with theme details
+        res.render("set", { set }); // Pass set to the EJS template
+    } catch (err) {
+        res.status(404).render("404", { message: err });
+    }
 });
 
-app.get("/lego/sets/:num", async (req, res) => {
-  try {
-    let set = await legoData.getSetByNum(req.params.num);
-    res.render("set", { set })
-  } catch (err) {
-    res.status(404).render("404", { message: err });
-  }
-});
 
+app.get('/', async (req, res) => {
+    try {
+      // Fetch featured sets
+      let featuredSets = await legoData.getFeaturedSets(6); // Fetch 6 featured sets
+      console.log(featuredSets); // Debugging to confirm data is fetched
+      res.render("home", { featuredSets }); // Pass the data to the template
+    } catch (err) {
+      console.error("Error fetching featured sets:", err);
+      res.render("500", { message: `Error fetching featured sets: ${err.message}` });
+    }
+  });
+  
+  
+  
 app.use((req, res, next) => {
   res.status(404).render("404", { message: "I'm sorry, we're unable to find what you're looking for" });
 });

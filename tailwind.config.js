@@ -5,7 +5,12 @@ module.exports = {
     './public/**/*.ejs',   // Watch for changes in .html files in the public folder (if any)
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        red: require('tailwindcss/colors').red,
+        yellow: require('tailwindcss/colors').yellow,
+      },
+    },
   },
   plugins: [
     require('@tailwindcss/typography'), 

@@ -28,7 +28,7 @@
             <div class="text-lg space-y-4 text-gray-100">
                 <p><strong class="text-yellow-400">Set Name:</strong> <span class="text-yellow-300"><%= set.name %></span></p>
                 <p><strong class="text-yellow-400">Year Released:</strong> <span class="text-yellow-300"><%= set.year %></span></p>
-                <p><strong class="text-yellow-400">Theme:</strong> <span class="text-yellow-300"><%= set.theme.name || "Unknown" %></span></p>
+                <p><strong class="text-yellow-400">Theme:</strong> <span class="text-yellow-300"><%= set.theme ? set.theme.name : "Unknown" %></span></p>
                 <p><strong class="text-yellow-400">Number of Parts:</strong> <span class="text-yellow-300"><%= set.num_parts %></span></p>
             </div>
         </div>
