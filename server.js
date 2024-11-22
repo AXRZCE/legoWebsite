@@ -30,6 +30,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 console.log("Starting server...");
 
+app.get('/', (req, res) => {
+    res.render("home");
+});
+
 // Route setup will only function correctly if initialization is successful
 legoSets.initialize()
     .then(() => {
@@ -146,18 +150,7 @@ legoSets.initialize()
                 });
         });
 
-        app.get('/', (req, res) => {
-            console.log("Fetching featured sets...");
-            legoSets.getFeaturedSets()
-                .then(featuredSets => {
-                    console.log("Featured sets fetched successfully.");
-                    res.render('home', { featuredSets });
-                })
-                .catch(err => {
-                    console.error("Error fetching featured sets:", err);
-                    res.render('505', { message: `Unable to load featured sets: ${err.message}` });
-                });
-        });
+        
         
         // About route
         app.get('/about', (req, res) => {
