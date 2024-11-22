@@ -196,6 +196,9 @@
 // startServer(PORT);
 
 // module.exports = app;
+const path = require('path'); // Ensure this is already required at the top of your file
+
+app.set('views', path.join(__dirname, 'views'));
 
 const legoData = require("./modules/legoSets");
 const express = require('express');
