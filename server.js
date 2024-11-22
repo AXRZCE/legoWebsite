@@ -30,15 +30,15 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 console.log("Starting server...");
 
-app.get('/', (req, res) => {
-    res.render("home");
-});
-
 // Route setup will only function correctly if initialization is successful
 legoSets.initialize()
     .then(() => {
         console.log("legoSets initialized successfully.");
 
+        app.get('/', (req, res) => {
+            res.render("home");
+        });
+        
         // Route to display all sets with optional theme filtering
         app.get('/lego/sets', (req, res) => {
             const themeFilter = req.query.theme || '';
