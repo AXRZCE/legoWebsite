@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "main": "server.js",
   "scripts": {
-    "tw:build": "npx tailwindcss -i ./public/css/tailwind.css -o ./public/css/main.css --watch",
+    "tw:build": "npx tailwindcss -i ./public/css/tailwind.css -o ./public/css/main.css --minify",
     "start": "node server.js",
     "dev": "nodemon server.js",
-    "build": "npm install && npm run tw:build"
+    "build": "npm run tw:build"
   },
   "author": "",
   "license": "ISC",
