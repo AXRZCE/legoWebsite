@@ -11,8 +11,5 @@
       "src": "/(.*)",
       "dest": "server.js"
     }
-  ],
-  "scripts": {
-    "build": "npx tailwindcss -i ./public/css/tailwind.css -o ./public/css/main.css"
-  }
+  ]
 }
