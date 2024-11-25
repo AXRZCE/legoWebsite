@@ -1,9 +1,40 @@
+/********************************************************************************
+* WEB322 – Assignment 05
+*
+* I declare that this assignment is my own work in accordance with Seneca's
+* Academic Integrity Policy:
+*
+* https://www.senecacollege.ca/about/policies/academic-integrity-policy.html
+*
+* Name: Aksharajsinh K. Parmar  Student ID: 1402024223 Date: 24.11.24
+*
+* Published URL: https://lego-website-5d7phz1e3-aksharajsinhs-projects.vercel.app/
+*
+********************************************************************************/
 const path = require('path'); // Ensure this is required
 const legoData = require("./modules/legoSets");
 const express = require('express');
 const app = express(); // Initialize 'app' first
 
-const HTTP_PORT = process.env.PORT || 8080;
+// Start the server with dynamic port handling
+const PORT = process.env.PORT || 1000;
+
+function startServer(port) {
+    app.listen(port, () => {
+        console.log(`Server running on http://localhost:${port}`);
+    }).on('error', (err) => {
+        if (err.code === 'EADDRINUSE') {
+            console.warn(`Port ${port} is already in use. Trying a different port...`);
+            startServer(port + 1); // Increment the port number and try again
+        } else {
+            console.error("Failed to start server:", err.message);
+        }
+    });
+}
+
+startServer(PORT);
+
+module.exports = app;
 
 // Middleware to serve static files and parse URL-encoded data
 app.use(express.static("public"));
