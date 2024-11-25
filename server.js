@@ -6,7 +6,7 @@ const app = express(); // Initialize 'app' first
 const HTTP_PORT = process.env.PORT || 8080;
 
 // Middleware to serve static files and parse URL-encoded data
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 
 // Set the view engine and views directory
