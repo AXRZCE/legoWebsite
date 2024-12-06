@@ -30,7 +30,7 @@
                     <img src="<%= set.img_url || '/images/default-set.jpg' %>" alt="<%= set.name || 'Lego Set' %>" class="w-full h-56 object-cover border-b-4 border-yellow-500">
                     <div class="card-content p-6 text-yellow-500">
                         <h2 class="text-xl font-semibold mb-2"><%= set.name || 'Unnamed Set' %></h2>
-                        <p class="text-yellow-400 mb-4"><%= set.Theme ? set.Theme.name : 'Unknown Theme' %></p>
+                        <p><strong class="text-yellow-400">Theme:</strong> <span class="text-yellow-300"><%= set.theme_id ? set.theme_id.name : "Unknown" %></span></p>
                         <p class="text-yellow-300 mb-4"><%= set.year ? `Released in ${set.year}` : '' %></p>
                         <a href="/lego/sets/<%= set.set_num %>" class="inline-block bg-yellow-500 text-gray-900 px-4 py-2 rounded hover:bg-yellow-600">
                             View Set

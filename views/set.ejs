@@ -28,15 +28,18 @@
             <div class="text-lg space-y-4 text-gray-100">
                 <p><strong class="text-yellow-400">Set Name:</strong> <span class="text-yellow-300"><%= set.name %></span></p>
                 <p><strong class="text-yellow-400">Year Released:</strong> <span class="text-yellow-300"><%= set.year %></span></p>
-                <p><strong class="text-yellow-400">Theme:</strong> <span class="text-yellow-300"><%= set.theme ? set.theme.name : "Unknown" %></span></p>
-                <p><strong class="text-yellow-400">Number of Parts:</strong> <span class="text-yellow-300"><%= set.num_parts %></span></p>
+                <p><strong class="text-yellow-400">Theme:</strong> <span class="text-yellow-300"><%= set.theme_id ? set.theme_id.name : "Unknown" %></span></p>
+                <p><strong class="text-yellow-400">Number of Parts:</strong> <span class="text-yellow-300"><%= set.num_parts ? set.num_parts.name : "1" %></span></p>
             </div>
         </div>
 
         <!-- Buttons Section -->
         <div class="mt-12 text-center space-x-4">
             <a href="#" onclick="history.back(); return false;" class="inline-block px-8 py-3 bg-yellow-500 text-gray-900 rounded-lg font-semibold hover:bg-yellow-600 shadow-md">Return</a>
-            <a href="/lego/editSet/<%= set.set_num %>" class="inline-block px-8 py-3 bg-green-500 text-gray-900 rounded-lg font-semibold hover:bg-green-600 shadow-md">Edit Set</a>
+            
+            <% if (session.user) { %> <!-- Restriction logic for logged-in users -->
+                <a href="/lego/editSet/<%= set.set_num %>" class="inline-block px-8 py-3 bg-green-500 text-gray-900 rounded-lg font-semibold hover:bg-green-600 shadow-md">Edit Set</a>
+            <% } %>
         </div>
     </div>
 </body>

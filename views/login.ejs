@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Log In | Lego Collection</title>
+  <link rel="stylesheet" href="/css/main.css">
+</head>
+<body class="bg-gray-900 text-gray-100 min-h-screen flex flex-col">
+
+  <!-- Navbar -->
+  <%- include('partials/navbar', { page: '/login', session: session }) %>
+
+  <!-- Main Content -->
+  <main class="flex-grow flex justify-center items-center">
+    <div class="w-full max-w-md bg-gray-800 p-6 rounded-lg shadow-lg">
+      <h2 class="text-center text-yellow-300 text-2xl font-bold mb-2">Log In</h2>
+      <p class="text-center text-yellow-400 mb-6">Please provide your credentials below</p>
+
+      <!-- Login Form -->
+      <form method="POST" action="/login" class="space-y-4">
+        <!-- Username Field -->
+        <div>
+          <label for="userName" class="block text-yellow-300 mb-2">User Name</label>
+          <input 
+            type="text" 
+            id="userName" 
+            name="userName" 
+            placeholder="User Name" 
+            class="w-full p-2 bg-gray-700 text-yellow-200 border border-yellow-400 rounded focus:outline-none focus:ring-2 focus:ring-yellow-500"
+            required>
+        </div>
+
+        <!-- Password Field -->
+        <div>
+          <label for="password" class="block text-yellow-300 mb-2">Password</label>
+          <input 
+            type="password" 
+            id="password" 
+            name="password" 
+            placeholder="Password" 
+            class="w-full p-2 bg-gray-700 text-yellow-200 border border-yellow-400 rounded focus:outline-none focus:ring-2 focus:ring-yellow-500"
+            required>
+        </div>
+
+        <!-- Error Message -->
+        <% if (errorMessage) { %>
+        <div class="bg-red-500 text-white p-3 rounded-lg mt-4">
+          <p><%= errorMessage %></p>
+        </div>
+        <% } %>
+
+        <!-- Submit Button -->
+        <div>
+          <button type="submit" class="w-full bg-yellow-500 hover:bg-yellow-600 text-gray-900 font-bold py-2 px-4 rounded">Login</button>
+        </div>
+      </form>
+    </div>
+  </main>
+
+</body>
+</html>

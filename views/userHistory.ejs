@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User History | Lego Collection</title>
+  <link rel="stylesheet" href="/css/main.css">
+</head>
+<body class="bg-gray-900 text-gray-100 min-h-screen flex flex-col">
+  <!-- Include Navbar -->
+  <%- include('partials/navbar', { page: "/userHistory" }) %>
+
+  <!-- Main Content -->
+  <main class="container mx-auto mt-10 px-4">
+    <div class="text-center mb-8">
+      <h1 class="text-4xl font-bold text-yellow-400 mb-2"><%= session.user.userName %></h1>
+      <p class="text-gray-300">User History: <%= session.user.email %></p>
+    </div>
+
+    <!-- History Table -->
+    <div class="overflow-x-auto bg-gray-800 p-6 rounded-lg shadow-lg">
+      <table class="table-auto w-full text-left text-gray-200">
+        <thead>
+          <tr class="bg-gray-700 text-yellow-300">
+            <th class="px-4 py-2">Login Date/Time</th>
+            <th class="px-4 py-2">Client Information</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% session.user.loginHistory.forEach((history) => { %>
+          <tr class="border-b border-gray-700">
+            <td class="px-4 py-2"><%= new Date(history.dateTime).toLocaleString() %></td>
+            <td class="px-4 py-2"><%= history.userAgent %></td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</body>
+</html>
