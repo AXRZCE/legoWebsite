@@ -28,7 +28,7 @@ const Set = mongoose.model('Set', setSchema);
 function initialize() {
   return new Promise((resolve, reject) => {
     mongoose
-      .connect(process.env.MONGODB, { useNewUrlParser: true, useUnifiedTopology: true })
+      .connect(process.env.MONGODB)
       .then(() => {
         console.log('Connected to MongoDB Atlas!');
         resolve();
