@@ -19,7 +19,7 @@ const authData = require("./modules/auth-service");
 
 const app = express();
 const PORT = process.env.PORT || 1000;
-
+app.use(express.static(path.join(__dirname, "public")));
 // Middleware for client sessions
 app.use(
   clientSessions({
