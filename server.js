@@ -1,5 +1,5 @@
 /********************************************************************************
-* WEB322 – Assignment 05
+* WEB322 – Assignment 06
 *
 * I declare that this assignment is my own work in accordance with Seneca's
 * Academic Integrity Policy:
@@ -8,7 +8,7 @@
 *
 * Name: Aksharajsinh K. Parmar  Student ID: 1402024223 Date: 24.11.24
 *
-* Published URL: https://lego-website-5d7phz1e3-aksharajsinhs-projects.vercel.app/
+* Published URL: https://lego-website-seven.vercel.app/
 ********************************************************************************/
 
 const express = require("express");
